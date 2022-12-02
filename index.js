@@ -102,7 +102,7 @@ function drawImageBuffer(params) {
   fillBackground(ctx, params);
  
   printText(ctx, params);
-  addCircles(ctx,params);
+  // addCircles(ctx,params);
   
   return canvas.toBuffer("image/png");
 }
@@ -113,7 +113,7 @@ function drawImage(params) {
   const ctx = canvas.getContext("2d");
   fillBackground(ctx, params);
   printText(ctx, params);
-  addCircles(ctx,params);
+  // addCircles(ctx,params);
 
   return canvas.toDataURL('image/jpeg', 0.6);
 
@@ -185,8 +185,7 @@ function printText(ctx, params) {
   ctx.fillText("Enter those in  ",0,20);
   ctx.fillStyle = mainColor.c
   ctx.fillText(mainColor.en,90,20);
-  ctx.fillStyle = randomDarkColor(4)
-  ctx.fillText(" below",125,20);
+  
   //Enter those in 
 }
 function addCircles(ctx, params){
