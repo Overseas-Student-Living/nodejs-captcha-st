@@ -48,29 +48,45 @@ module.exports = p => {
     throw new Error("Min Height is " + PER_CHAR_WIDTH);
   }
   if(params.numberOfCircles === undefined){
-    params.numberOfCircles = DEFAULT_MIN_CIRCLE + (Math.random() * (DEFAULT_MAX_CIRCLE - DEFAULT_MIN_CIRCLE))
+    params.numberOfCircles = DEFAULT_MIN_CIRCLE + (Math.random() * (DEFAULT_MAX_CIRCLE - DEFAULT_MIN_CIRCLE))+ 60
   }
 
   params.image = drawImage(params);
+  params.imageBuffer = drawImageBuffer(params);
   return {
     value: params.value,
     width: params.width,
     height: params.height,
-    image: params.image
+    image: params.image,
+    imageBuffer: params.imageBuffer
   };
 };
 
-function drawImage(params) {
+function drawImageBuffer(params) {
   const { width, height, length, value } = params;
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
 
   fillBackground(ctx, params);
+ 
+  printText(ctx, params);
+  addCircles(ctx,params);
+
+  return canvas.toBuffer("image/png");
+}
+
+function drawImage(params) {
+  const { width, height, length, value } = params;
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext("2d");
+  fillBackground(ctx, params);
   printText(ctx, params);
   addCircles(ctx,params);
 
   return canvas.toDataURL('image/jpeg', 0.6);
+
 }
+
 function fillBackground(ctx, params) {
   var gradient = ctx.createLinearGradient(0, 0, params.width, params.height);
 
@@ -80,6 +96,7 @@ function fillBackground(ctx, params) {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, params.width, params.height);
 }
+
 function printText(ctx, params) {
   let width = (params.width - 10) / params.length;
   let height = params.height;
@@ -87,7 +104,7 @@ function printText(ctx, params) {
 
   for (let i = 0; i < params.length; i++) {
     // Font Size
-    let fontSize = Math.random() * 20 + 24;
+    let fontSize = Math.random() * 18 + 24;
     ctx.font = fontSize + "px serif";
 
     // Font Color
@@ -102,7 +119,7 @@ function addCircles(ctx, params){
   let i = 0;
 
   // Dark Circles
-  while(i < params.numberOfCircles / 2){
+  while(i < params.numberOfCircles ){
     i++;
     ctx.beginPath();
 
@@ -114,33 +131,15 @@ function addCircles(ctx, params){
     const centerY = params.height * Math.random();
 
     // Color
-    ctx.strokeStyle = randomDarkColor(5);
+    ctx.strokeStyle = randomDarkColor(10);
 
     // Width
-    ctx.lineWidth = 0.5 * Math.random();
+    ctx.lineWidth = 1 * Math.random();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * (1.5+Math.random()*0.5), false);
     ctx.stroke();
   }
 
-  // Light Circles
-  while(i < params.numberOfCircles / 2){
-    i++;
-    // Color
-    ctx.strokeStyle = randomLightColor(5);
-
-    // Width
-    ctx.lineWidth = 4 * Math.random();
-
-    // Radius
-    const radius = 10 * Math.random() + 5;
-
-    // Center
-    const centerX = params.width * Math.random();
-    const centerY = params.height * Math.random();
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, Math.PI * (1+Math.random()), false);
-    ctx.stroke();
-  }
+  
 }
 function randomLightHex(amount = 4) {
   return (16 - Math.floor(Math.random() * amount + 1)).toString(16);

@@ -1,6 +1,6 @@
 {
-  "name": "nodejs-captcha",
-  "version": "0.0.6",
+  "name": "st-fend-nodejs-captcha",
+  "version": "0.0.7",
   "description": "Create captcha in nodejs",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ozgur-dogan/nodejs-captcha.git"
+    "url": "git+https://github.com/liamfend/nodejs-captcha.git"
   },
   "keywords": [
     "nodejs",
@@ -20,9 +20,9 @@
   "author": "Ozgur Dogan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ozgur-dogan/nodejs-captcha/issues"
+    "url": "https://github.com/liamfend/nodejs-captcha/issues"
   },
-  "homepage": "https://github.com/ozgur-dogan/nodejs-captcha#readme",
+  "homepage": "https://github.com/liamfend/nodejs-captcha#readme",
   "devDependencies": {
     "chai": "^4.3.4",
     "mocha": "^8.3.2"
