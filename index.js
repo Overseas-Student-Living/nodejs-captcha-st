@@ -1,5 +1,6 @@
 "use strict";
-const { createCanvas } = require("canvas");
+const { createCanvas ,registerFont} = require("canvas");
+registerFont('./fonts/OpenSans-Italic.ttf', { family: 'OpenSans' })
 /**
  * There is a single object parameter as an input to the function
  * Here is the list of available parameters, all of them optional
@@ -8,7 +9,7 @@ const { createCanvas } = require("canvas");
  * -- value {String} value of the captcha
  */
 const PER_CHAR_WIDTH = 40;
-const MIN_HEIGHT = 50;
+const MIN_HEIGHT = 40;
 const DEFAULT_HEIGHT = 100;
 const DEFAULT_WIDTH = 200;
 const DEFAULT_LENGTH = 6;
@@ -71,6 +72,7 @@ module.exports = p => {
   } else if (params.width / params.length < PER_CHAR_WIDTH) {
     throw new Error("Width per char should be more than " + PER_CHAR_WIDTH);
   }
+  console.log(params.height)
   if (params.height === undefined) {
     params.height = DEFAULT_HEIGHT;
   } else if (params.height < MIN_HEIGHT) {
@@ -99,7 +101,7 @@ function drawImageBuffer(params) {
   fillBackground(ctx, params);
  
   printText(ctx, params);
-   addCircles(ctx,params);
+  addCircles(ctx,params);
   
   return canvas.toBuffer("image/png");
 }
@@ -164,7 +166,7 @@ function printText(ctx, params) {
     // Font Size
     // let fontSize = Math.random() *10+ 24;
     let fontSize = Math.random() *10+ 14;
-    ctx.font = fontSize + "px serif";
+    ctx.font = fontSize + 'px "OpenSans"';
 
     // Font Color
     ctx.fillStyle = randomDarkColor(4)
@@ -176,14 +178,14 @@ function printText(ctx, params) {
     ctx.fillText(value.charAt(i), 5 + width * i,50);   
   }
   
-  ctx.font = "14px serif";
+  ctx.font = '14px "OpenSans"';
   //Please enter blue characters
   ctx.fillStyle = randomDarkColor(4)
   ctx.fillText("Enter those in  ",0,20);
   ctx.fillStyle = mainColor.c
-  ctx.fillText(mainColor.en,85,20);
+  ctx.fillText(mainColor.en,90,20);
   ctx.fillStyle = randomDarkColor(4)
-  ctx.fillText(" below",120,20);
+  ctx.fillText(" below",125,20);
   //Enter those in 
 }
 function addCircles(ctx, params){
