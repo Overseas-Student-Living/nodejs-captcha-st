@@ -1,13 +1,13 @@
-# nodejs-captcha
+# st-nodejs-captcha
 Creates Captcha in base64 format
 
 # installation
-`npm install nodejs-captcha`
+`npm install st-nodejs-captcha`
 
 # usage
 ```javascript 
 // import library
-var captcha = require("nodejs-captcha");
+var captcha = require("st-nodejs-captcha");
 
 // Create new Captcha
 var newCaptcha = captcha();
@@ -30,7 +30,7 @@ var height = newCaptcha.heigth;
 
 "use strict";
 var http = require("http");
-var captcha = require("nodejs-captcha");
+var captcha = require("st-nodejs-captcha");
 var PORT = 8181;
 
 function handleRequest(req, res) {

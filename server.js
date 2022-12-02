@@ -5,7 +5,7 @@ var PORT = 8181;
 
 function handleRequest(req, res) {
   if (req.method === "GET" && (req.url === '/' || req.url.indexOf("index") > -1)){
-    let result = captcha();
+    let result = captcha({length:4});
     let source = result.image;
     res.end(
       `

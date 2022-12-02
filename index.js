@@ -14,6 +14,7 @@ const DEFAULT_WIDTH = 200;
 const DEFAULT_LENGTH = 6;
 const DEFAULT_MIN_CIRCLE = 10;
 const DEFAULT_MAX_CIRCLE = 25;
+ 
 
 module.exports = p => {
   const params = Object.assign({}, p);
@@ -25,13 +26,41 @@ module.exports = p => {
   } else if (params.length < 1) {
     throw new Error("Parameter Length is less then 1");
   }
+  params.rnStr = {
+    value:'',
+    indexs:[]
+  };
+  
   if (params.value === undefined) {
-    params.value = "";
+    params.value = ""; 
+    
     const len = params.charset.length;
     for (let i = 0; i < params.length; i++) {
       params.value += params.charset[Math.floor(Math.random() * len)];
     }
+
+    let lastValues = params.value.split('');
+     
+    for(let i =0 ; i< params.value.length*2;i++){
+      
+      if (lastValues.length >= params.value.length*2 - i  ) {
+        params.rnStr.value += lastValues.join('');
+        for(let j =0;j< lastValues.length;j++){
+          params.rnStr.indexs.push(i+j);
+        }
+        break;
+      }
+    
+      if (Math.floor(Math.random()*100) % 2 === 0&&lastValues.length>0) {
+        params.rnStr.value += lastValues.shift();
+        params.rnStr.indexs.push(i);
+      } else {
+        params.rnStr.value +=  params.charset[Math.floor(Math.random() * len)];
+      }
+    }
+     
   }
+
   if (params.length !== params.value.length) {
     throw new Error(
       "Parameter Length and Parameter Value Length is inconsistent"
@@ -48,10 +77,10 @@ module.exports = p => {
     throw new Error("Min Height is " + PER_CHAR_WIDTH);
   }
   if(params.numberOfCircles === undefined){
-    params.numberOfCircles = DEFAULT_MIN_CIRCLE + (Math.random() * (DEFAULT_MAX_CIRCLE - DEFAULT_MIN_CIRCLE))+ 60
+    params.numberOfCircles = DEFAULT_MIN_CIRCLE + (Math.random() * (DEFAULT_MAX_CIRCLE - DEFAULT_MIN_CIRCLE)) 
   }
 
-  params.image = drawImage(params);
+  params.image =  drawImage(params);
   params.imageBuffer = drawImageBuffer(params);
   return {
     value: params.value,
@@ -70,8 +99,8 @@ function drawImageBuffer(params) {
   fillBackground(ctx, params);
  
   printText(ctx, params);
-  addCircles(ctx,params);
-
+   addCircles(ctx,params);
+  
   return canvas.toBuffer("image/png");
 }
 
@@ -97,23 +126,64 @@ function fillBackground(ctx, params) {
   ctx.fillRect(0, 0, params.width, params.height);
 }
 
-function printText(ctx, params) {
-  let width = (params.width - 10) / params.length;
-  let height = params.height;
-  let value = params.value;
 
-  for (let i = 0; i < params.length; i++) {
+
+function printText(ctx, params) {
+  
+  let height = params.height;
+  let colors = [{
+    zh:'黄色',
+    en:'Yellow',
+    c:'#FFFF00',
+
+  },{
+    zh:'蓝色',
+    en:'Blue',
+    c:'#4169E1'
+  },
+  {
+    zh:'红色',
+    en:'Red',
+    c:'#FF0000'
+  },
+  {
+    zh:'绿色',
+    en:'Green',
+    c:'#008000' },
+    {
+      zh:'紫色',
+      en:'Purple',
+      c:'#800080' }
+  
+  ]
+  let value = params.rnStr.value;
+  let width = (params.width - 10) / value.length;
+  let mainColor = colors[randomNumber(colors.length-1)] 
+ 
+  for (let i = 0; i < params.rnStr.value.length; i++) {
     // Font Size
-    let fontSize = Math.random() * 18 + 24;
+    // let fontSize = Math.random() *10+ 24;
+    let fontSize = Math.random() *10+ 14;
     ctx.font = fontSize + "px serif";
 
     // Font Color
-    ctx.fillStyle = randomDarkColor(10);
-
-    // Font Location
-    const topMargin = (height - fontSize) * Math.random() / 2.5;
-    ctx.fillText(value.charAt(i), 5 + width * i, height / 3 + fontSize - 10 + topMargin);
+    ctx.fillStyle = randomDarkColor(4)
+    let isLine1 = i  < params.rnStr.value.length/2
+     if(params.rnStr.indexs.indexOf(i)>=0){
+      ctx.fillStyle = mainColor.c
+     }
+    // ctx.fillText(value.charAt(i), 5 + width * (isLine1?i:(i-4)),isLine1? 50:70 );   
+    ctx.fillText(value.charAt(i), 5 + width * i,50);   
   }
+  
+  ctx.font = "14px serif";
+  //Please enter blue characters
+  ctx.fillStyle = randomDarkColor(4)
+  ctx.fillText("Please enter  ",0,20);
+  ctx.fillStyle = mainColor.c
+  ctx.fillText(mainColor.en,80,20);
+  // ctx.fillStyle = randomDarkColor(4)
+  // ctx.fillText("字符",70,20);
 }
 function addCircles(ctx, params){
   let i = 0;
@@ -154,4 +224,7 @@ function randomDarkColor(amount) {
   return (
     "#" + randomDarkHex(amount) + randomDarkHex(amount) + randomDarkHex(amount)
   );
+}
+function randomNumber(maxNumber){
+  return Math.floor(Math.random() * maxNumber + 1)
 }
