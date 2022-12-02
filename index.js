@@ -176,7 +176,7 @@ function printText(ctx, params) {
       ctx.fillStyle = mainColor.c
      }
     // ctx.fillText(value.charAt(i), 5 + width * (isLine1?i:(i-4)),isLine1? 50:70 );   
-    ctx.fillText(value.charAt(i), 5 + width * i,50);   
+    ctx.fillText(value.charAt(i), 5 + width * i,60);   
   }
   
   ctx.font = '14px "OpenSans"';
@@ -185,7 +185,8 @@ function printText(ctx, params) {
   ctx.fillText("Enter those in  ",0,20);
   ctx.fillStyle = mainColor.c
   ctx.fillText(mainColor.en,90,20);
-  
+  ctx.fillStyle = randomDarkColor(4)
+  ctx.fillText(" ↓",135,20);
   //Enter those in 
 }
 function addCircles(ctx, params){

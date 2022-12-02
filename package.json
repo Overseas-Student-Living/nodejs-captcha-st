@@ -1,6 +1,6 @@
 {
   "name": "st-nodejs-captcha",
-  "version": "0.0.12",
+  "version": "0.0.15",
   "description": "Create captcha in nodejs",
   "main": "index.js",
   "scripts": {
