@@ -179,11 +179,12 @@ function printText(ctx, params) {
   ctx.font = "14px serif";
   //Please enter blue characters
   ctx.fillStyle = randomDarkColor(4)
-  ctx.fillText("Please enter  ",0,20);
+  ctx.fillText("Enter those in  ",0,20);
   ctx.fillStyle = mainColor.c
-  ctx.fillText(mainColor.en,80,20);
-  // ctx.fillStyle = randomDarkColor(4)
-  // ctx.fillText("字符",70,20);
+  ctx.fillText(mainColor.en,85,20);
+  ctx.fillStyle = randomDarkColor(4)
+  ctx.fillText(" below",120,20);
+  //Enter those in 
 }
 function addCircles(ctx, params){
   let i = 0;
