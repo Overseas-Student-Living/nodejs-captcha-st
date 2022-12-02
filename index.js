@@ -1,6 +1,7 @@
 "use strict";
 const { createCanvas ,registerFont} = require("canvas");
-registerFont('./fonts/OpenSans-Italic.ttf', { family: 'OpenSans' })
+const path = require('path')
+registerFont(path.join(__dirname,'./fonts/OpenSans-Italic.ttf'), { family: 'OpenSans' })
 /**
  * There is a single object parameter as an input to the function
  * Here is the list of available parameters, all of them optional
@@ -72,7 +73,7 @@ module.exports = p => {
   } else if (params.width / params.length < PER_CHAR_WIDTH) {
     throw new Error("Width per char should be more than " + PER_CHAR_WIDTH);
   }
-  console.log(params.height)
+
   if (params.height === undefined) {
     params.height = DEFAULT_HEIGHT;
   } else if (params.height < MIN_HEIGHT) {
