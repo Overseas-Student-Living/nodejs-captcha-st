@@ -16,7 +16,7 @@ const DEFAULT_WIDTH = 200;
 const DEFAULT_LENGTH = 6;
 const DEFAULT_MIN_CIRCLE = 10;
 const DEFAULT_MAX_CIRCLE = 25;
- 
+
 
 module.exports = p => {
   const params = Object.assign({}, p);
@@ -32,19 +32,19 @@ module.exports = p => {
     value:'',
     indexs:[]
   };
-  
+
   if (params.value === undefined) {
-    params.value = ""; 
-    
+    params.value = "";
+
     const len = params.charset.length;
     for (let i = 0; i < params.length; i++) {
       params.value += params.charset[Math.floor(Math.random() * len)];
     }
 
     let lastValues = params.value.split('');
-     
+
     for(let i =0 ; i< params.value.length*2;i++){
-      
+
       if (lastValues.length >= params.value.length*2 - i  ) {
         params.rnStr.value += lastValues.join('');
         for(let j =0;j< lastValues.length;j++){
@@ -52,7 +52,7 @@ module.exports = p => {
         }
         break;
       }
-    
+
       if (Math.floor(Math.random()*100) % 2 === 0&&lastValues.length>0) {
         params.rnStr.value += lastValues.shift();
         params.rnStr.indexs.push(i);
@@ -60,7 +60,7 @@ module.exports = p => {
         params.rnStr.value +=  params.charset[Math.floor(Math.random() * len)];
       }
     }
-     
+
   }
 
   if (params.length !== params.value.length) {
@@ -80,12 +80,14 @@ module.exports = p => {
     throw new Error("Min Height is " + PER_CHAR_WIDTH);
   }
   if(params.numberOfCircles === undefined){
-    params.numberOfCircles = DEFAULT_MIN_CIRCLE + (Math.random() * (DEFAULT_MAX_CIRCLE - DEFAULT_MIN_CIRCLE)) 
+    params.numberOfCircles = DEFAULT_MIN_CIRCLE + (Math.random() * (DEFAULT_MAX_CIRCLE - DEFAULT_MIN_CIRCLE))
   }
 
   params.image =  drawImage(params);
+  const color = params.color;
   params.imageBuffer = drawImageBuffer(params);
   return {
+    color,
     value: params.value,
     width: params.width,
     height: params.height,
@@ -100,10 +102,10 @@ function drawImageBuffer(params) {
   const ctx = canvas.getContext("2d");
 
   fillBackground(ctx, params);
- 
+
   printText(ctx, params);
   // addCircles(ctx,params);
-  
+
   return canvas.toBuffer("image/png");
 }
 
@@ -132,37 +134,44 @@ function fillBackground(ctx, params) {
 
 
 function printText(ctx, params) {
-  
-  let height = params.height;
-  let colors = [{
-    zh:'黄色',
-    en:'Yellow',
-    c:'#FFFF00',
 
-  },{
-    zh:'蓝色',
-    en:'Blue',
-    c:'#4169E1'
-  },
-  {
-    zh:'红色',
-    en:'Red',
-    c:'#FF0000'
-  },
-  {
-    zh:'绿色',
-    en:'Green',
-    c:'#008000' },
+  let height = params.height;
+  let colors = [
     {
-      zh:'紫色',
-      en:'Purple',
-      c:'#800080' }
-  
+      zh: '黄色',
+      en: 'Yellow',
+      c: '#FFFF00',
+    },
+    {
+      zh: '蓝色',
+      en: 'Blue',
+      c: '#4169E1'
+    },
+    {
+      zh: '红色',
+      en: 'Red',
+      c: '#FF0000'
+    },
+    {
+      zh: '绿色',
+      en: 'Green',
+      c: '#008000'
+    },
+    {
+      zh: '紫色',
+      en: 'Purple',
+      c: '#800080'
+    },
+    {
+      zh: '橙色',
+      en: 'Orange',
+      c: '#FF8000'
+    },
   ]
   let value = params.rnStr.value;
   let width = (params.width - 10) / value.length;
-  let mainColor = colors[randomNumber(colors.length-1)] 
- 
+  let mainColor = colors[randomNumber(colors.length-1)]
+
   for (let i = 0; i < params.rnStr.value.length; i++) {
     // Font Size
     // let fontSize = Math.random() *10+ 24;
@@ -175,19 +184,20 @@ function printText(ctx, params) {
      if(params.rnStr.indexs.indexOf(i)>=0){
       ctx.fillStyle = mainColor.c
      }
-    // ctx.fillText(value.charAt(i), 5 + width * (isLine1?i:(i-4)),isLine1? 50:70 );   
-    ctx.fillText(value.charAt(i), 5 + width * i,60);   
+    // ctx.fillText(value.charAt(i), 5 + width * (isLine1?i:(i-4)),isLine1? 50:70 );
+    ctx.fillText(value.charAt(i), 5 + width * i,60);
   }
-  
+
   ctx.font = '14px "OpenSans"';
   //Please enter blue characters
   ctx.fillStyle = randomDarkColor(4)
   ctx.fillText("Enter those in  ",0,20);
   ctx.fillStyle = mainColor.c
+  params.color = mainColor.en;
   ctx.fillText(mainColor.en,90,20);
   ctx.fillStyle = randomDarkColor(4)
   ctx.fillText(" ↓",135,20);
-  //Enter those in 
+  //Enter those in
 }
 function addCircles(ctx, params){
   let i = 0;
@@ -213,7 +223,7 @@ function addCircles(ctx, params){
     ctx.stroke();
   }
 
-  
+
 }
 function randomLightHex(amount = 4) {
   return (16 - Math.floor(Math.random() * amount + 1)).toString(16);
