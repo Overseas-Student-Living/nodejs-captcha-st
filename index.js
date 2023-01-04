@@ -191,12 +191,12 @@ function printText(ctx, params) {
   ctx.font = '14px "OpenSans"';
   //Please enter blue characters
   ctx.fillStyle = randomDarkColor(4)
-  ctx.fillText("Enter those in  ",0,20);
+  // ctx.fillText("Enter those in  ",0,20);
   ctx.fillStyle = mainColor.c
   params.color = mainColor.en;
-  ctx.fillText(mainColor.en,90,20);
+  // ctx.fillText(mainColor.en,90,20);
   ctx.fillStyle = randomDarkColor(4)
-  ctx.fillText(" ↓",135,20);
+  // ctx.fillText(" ↓",135,20);
   //Enter those in
 }
 function addCircles(ctx, params){
