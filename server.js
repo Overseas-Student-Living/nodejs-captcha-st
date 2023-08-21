@@ -5,7 +5,7 @@ var PORT = 8181;
 
 function handleRequest(req, res) {
   if (req.method === "GET" && (req.url === '/' || req.url.indexOf("index") > -1)){
-    let result = captcha({length:4});
+    let result = captcha({length:4, height: 60});
     let source = result.image;
     res.end(
       `
@@ -15,8 +15,9 @@ function handleRequest(req, res) {
             <title>Test Captcha</title>
         </head>
         <body>
-        <label>Test image</label>
         <img src="${source}" />
+        <br/>
+        <label>${result.value}</label>
         </body>
     </html>
     `
