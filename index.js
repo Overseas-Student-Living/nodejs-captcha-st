@@ -1,7 +1,7 @@
 "use strict";
-const { createCanvas ,registerFont} = require("canvas");
+const { createCanvas, registerFont } = require("canvas");
 const path = require('path')
-registerFont(path.join(__dirname,'./fonts/OpenSans-Italic.ttf'), { family: 'OpenSans' })
+registerFont(path.join(__dirname, './fonts/OpenSans-Italic.ttf'), { family: 'OpenSans' })
 /**
  * There is a single object parameter as an input to the function
  * Here is the list of available parameters, all of them optional
@@ -29,8 +29,8 @@ module.exports = p => {
     throw new Error("Parameter Length is less then 1");
   }
   params.rnStr = {
-    value:'',
-    indexs:[]
+    value: '',
+    indexs: []
   };
 
   if (params.value === undefined) {
@@ -43,21 +43,21 @@ module.exports = p => {
 
     let lastValues = params.value.split('');
 
-    for(let i =0 ; i< params.value.length*2;i++){
+    for (let i = 0; i < params.value.length * 2; i++) {
 
-      if (lastValues.length >= params.value.length*2 - i  ) {
+      if (lastValues.length >= params.value.length * 2 - i) {
         params.rnStr.value += lastValues.join('');
-        for(let j =0;j< lastValues.length;j++){
-          params.rnStr.indexs.push(i+j);
+        for (let j = 0; j < lastValues.length; j++) {
+          params.rnStr.indexs.push(i + j);
         }
         break;
       }
 
-      if (Math.floor(Math.random()*100) % 2 === 0&&lastValues.length>0) {
+      if (Math.floor(Math.random() * 100) % 2 === 0 && lastValues.length > 0) {
         params.rnStr.value += lastValues.shift();
         params.rnStr.indexs.push(i);
       } else {
-        params.rnStr.value +=  params.charset[Math.floor(Math.random() * len)];
+        params.rnStr.value += params.charset[Math.floor(Math.random() * len)];
       }
     }
 
@@ -79,11 +79,11 @@ module.exports = p => {
   } else if (params.height < MIN_HEIGHT) {
     throw new Error("Min Height is " + PER_CHAR_WIDTH);
   }
-  if(params.numberOfCircles === undefined){
+  if (params.numberOfCircles === undefined) {
     params.numberOfCircles = DEFAULT_MIN_CIRCLE + (Math.random() * (DEFAULT_MAX_CIRCLE - DEFAULT_MIN_CIRCLE))
   }
 
-  params.image =  drawImage(params);
+  params.image = drawImage(params);
   const color = params.color;
   params.imageBuffer = drawImageBuffer(params);
   return {
@@ -170,40 +170,39 @@ function printText(ctx, params) {
   ]
   let value = params.rnStr.value;
   let width = (params.width - 10) / value.length;
-  let mainColor = colors[randomNumber(colors.length-1)]
 
   for (let i = 0; i < params.rnStr.value.length; i++) {
-    // Font Size
-    // let fontSize = Math.random() *10+ 24;
-    let fontSize = Math.random() *10+ 14;
+    let mainColor = colors[randomNumber(colors.length - 1)]
+    let fontSize = Math.random() * 10 + 14;
     ctx.font = fontSize + 'px "OpenSans"';
 
+    let Y = height / 2 + 10 + Math.random() * 15 * (Math.random > 0.5 ? 1 : -1);
     // Font Color
     ctx.fillStyle = randomDarkColor(4)
-    let isLine1 = i  < params.rnStr.value.length/2
-     if(params.rnStr.indexs.indexOf(i)>=0){
+    if (params.rnStr.indexs.indexOf(i) >= 0) {
       ctx.fillStyle = mainColor.c
-     }
-    // ctx.fillText(value.charAt(i), 5 + width * (isLine1?i:(i-4)),isLine1? 50:70 );
-    ctx.fillText(value.charAt(i), 5 + width * i,60);
+      drawCircle(ctx, 10 + width * i, Y - 5, 12, mainColor.c);
+    }
+    ctx.fillText(value.charAt(i), 5 + width * i, Y);
   }
-
-  ctx.font = '14px "OpenSans"';
-  //Please enter blue characters
-  ctx.fillStyle = randomDarkColor(4)
-  // ctx.fillText("Enter those in  ",0,20);
-  ctx.fillStyle = mainColor.c
-  params.color = mainColor.en;
-  // ctx.fillText(mainColor.en,90,20);
-  ctx.fillStyle = randomDarkColor(4)
-  // ctx.fillText(" ↓",135,20);
-  //Enter those in
 }
-function addCircles(ctx, params){
+
+function drawCircle(ctx, centerX, centerY, radius, color) {
+  ctx.beginPath();
+  // Color
+  // ctx.strokeStyle = randomDarkColor(10);
+  ctx.strokeStyle = color;
+  // Width
+  ctx.lineWidth = 1 * Math.random() + 0.5;
+  ctx.arc(centerX, centerY, radius, 0, Math.PI * (1.5 + Math.random() * 0.5), false);
+  ctx.stroke();
+}
+
+function addCircles(ctx, params) {
   let i = 0;
 
   // Dark Circles
-  while(i < params.numberOfCircles ){
+  while (i < params.numberOfCircles) {
     i++;
     ctx.beginPath();
 
@@ -219,7 +218,7 @@ function addCircles(ctx, params){
 
     // Width
     ctx.lineWidth = 1 * Math.random();
-    ctx.arc(centerX, centerY, radius, 0, Math.PI * (1.5+Math.random()*0.5), false);
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * (1.5 + Math.random() * 0.5), false);
     ctx.stroke();
   }
 
@@ -239,6 +238,6 @@ function randomDarkColor(amount) {
     "#" + randomDarkHex(amount) + randomDarkHex(amount) + randomDarkHex(amount)
   );
 }
-function randomNumber(maxNumber){
+function randomNumber(maxNumber) {
   return Math.floor(Math.random() * maxNumber + 1)
 }
